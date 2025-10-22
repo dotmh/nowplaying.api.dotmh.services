@@ -40,7 +40,7 @@ export class Config {
     get Protocol() {
         if (!this.#protocol) {
             const protocol = Env.get(ENV_LASTFM_PROTOCOL)
-                .optional('http')
+                .optional('https')
                 .string;
             assertIsValidProtocol(protocol);
             this.#protocol = protocol;

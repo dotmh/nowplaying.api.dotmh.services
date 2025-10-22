@@ -4,6 +4,7 @@ import { Client } from "./last-fm/client.ts";
 import { Config } from "./last-fm/config.ts";
 
 const ENV_CONFIG_LIMIT = 'CONFIG_LIMIT';
+const JSON_HEADER = { headers: { "content-type": "application/json" } };
 
 Deno.serve(async () => {
   try {
@@ -11,8 +12,8 @@ Deno.serve(async () => {
     const client = new Client(config);
     const limit = Env.get(ENV_CONFIG_LIMIT).optional('1').int;
     const response = await nowPlaying(client, limit);
-    return new Response(JSON.stringify({ state: 'success', data: response }));
+    return new Response(JSON.stringify({ state: 'success', data: response }), JSON_HEADER);
   } catch (e) {
-    return new Response(JSON.stringify({ state: 'error', data: (e as Error).message }));
+    return new Response(JSON.stringify({ state: 'error', data: (e as Error).message }), JSON_HEADER);
   }
 })
