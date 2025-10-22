@@ -4,11 +4,12 @@ import { User__RecentTracks } from '../last-fm/@types/user.getRecentTracks.ts';
 
 const ENV_CONFIG_USER = 'CONFIG_USER';
 
-interface NowPlaying {
+export interface NowPlaying {
     images: { src: string, size: "small" | "medium" | "large" | "extralarge" }[];
     artist: string;
     album: string;
     track: string;
+    user: string;
 }
 
 export const nowPlaying = async (client: Client, limit: number = 1): Promise<NowPlaying | NowPlaying[] | undefined> => {
@@ -24,7 +25,7 @@ export const nowPlaying = async (client: Client, limit: number = 1): Promise<Now
         const artist = track.artist?.name;
         const album = track.album?.['#text'];
         const { name } = track;
-        return { images, artist, album, track: name };
+        return { images, artist, album, track: name, user };
     });
 
     return limit === 1 ? data.shift() : data;
