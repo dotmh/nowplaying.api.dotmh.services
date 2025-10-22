@@ -10,6 +10,7 @@ export interface NowPlaying {
     album: string;
     track: string;
     user: string;
+    nowPlaying: boolean;
 }
 
 export const nowPlaying = async (client: Client, limit: number = 1): Promise<NowPlaying | NowPlaying[] | undefined> => {
@@ -25,8 +26,11 @@ export const nowPlaying = async (client: Client, limit: number = 1): Promise<Now
         const artist = track.artist?.name;
         const album = track.album?.['#text'];
         const { name } = track;
-        return { images, artist, album, track: name, user };
+        const nowPlaying = track?.['@attr']?.nowplaying ?? false;
+        return { images, artist, album, track: name, user, nowPlaying };
     });
 
-    return limit === 1 ? data.shift() : data;
+    const first = data.find(({ nowPlaying }) => nowPlaying) ?? data[0];
+
+    return limit === 1 ? first : data;
 }

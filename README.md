@@ -59,11 +59,13 @@ application/json
 {
     state: "success",
     data: {
-        images: { src: string, size: "small" | "medium" | "large" | "extralarge" }[];
-        artist: string;
-        album: string;
-        track: string;
-    }
+      images: { src: string, size: "small" | "medium" | "large" | "extralarge" }[];
+      artist: string;
+      album: string;
+      track: string;
+      user: string;
+      nowPlaying: boolean;
+  }
 }
 ```
 
