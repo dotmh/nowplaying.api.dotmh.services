@@ -15,7 +15,23 @@ A small API using [Deno](https://deno.com) that will get the currently playing i
 
 # Getting Started
 
-The easiest and only support way to deploy this is to use [Deno Deploy](https://deno.com/deploy).
+The easiest and only supported way to deploy this is to use [Deno Deploy](https://deno.com/deploy).
+
+## Magic
+
+[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/dotmh/nowplaying.api.dotmh.services.git)
+
+- Get your last.fm API Key from <https://www.last.fm/api/accounts>
+- click the "Deploy on Deno" button above
+- Click the "Add Environment Variables" button
+- Add the following
+  - add `LASTFM_API_KEY` with your API Key from Last.fm
+  - add `CONFIG_USER` with the last.fm username
+- Click "Create App"
+- execute a get request to the URL to make sure it is working
+- Party
+
+## Manual
 
 - fork this repo
 - create an account on and/or login to <https://console.deno.com/>
@@ -23,7 +39,7 @@ The easiest and only support way to deploy this is to use [Deno Deploy](https://
 - on the Deno Deploy dashboard click "New App"
 - Connect Deno deploy to your GitHub account
 - Select the fork of this repo you made
-- Click the "Add Environment Variables"
+- Click the "Add Environment Variables" button
 - Add the following
   - add `LASTFM_API_KEY` with your API Key from Last.fm
   - add `CONFIG_USER` with the last.fm username
