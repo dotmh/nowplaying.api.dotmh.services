@@ -5,6 +5,7 @@ import { Config } from "./last-fm/config.ts";
 
 const ENV_CONFIG_LIMIT = 'CONFIG_LIMIT';
 const ENV_CONFIG_POWERED_BY = 'CONFIG_POWERED_BY';
+const ENV_CONFIG_MAX_AGE_SEC = 'CONFIG_MAX_AGE_SEC';
 
 const JSON_HEADER = { "content-type": "application/json" };
 const PRE_FLIGHT = [
@@ -19,6 +20,11 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Credentials": "true",
   "Access-Control-Allow-Headers": PRE_FLIGHT.join(", ")
 };
+const CACHE_HEADERS = {
+  'Max-Age': Env.get(ENV_CONFIG_MAX_AGE_SEC).optional('30').string,
+  'Stale-While-Revalidate': Env.get(ENV_CONFIG_MAX_AGE_SEC).optional('30').string,
+  'Stale-While-Error': Env.get(ENV_CONFIG_MAX_AGE_SEC).optional('30').string,
+}
 
 const asHeaders = (otherHeaders?: Record<string, string>) => {
   const poweredBy = Env.get(ENV_CONFIG_POWERED_BY).optional('DotMH Services').string;
@@ -26,6 +32,10 @@ const asHeaders = (otherHeaders?: Record<string, string>) => {
     headers: {
       ...JSON_HEADER,
       ...CORS_HEADERS,
+      'Cache-Control': Object
+        .entries(CACHE_HEADERS)
+        .map((directive) => directive.join('='))
+        .join(', '),
       ...otherHeaders ?? {},
       'X-POWERED-BY': poweredBy
     }
