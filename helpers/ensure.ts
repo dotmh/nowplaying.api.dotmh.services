@@ -36,8 +36,7 @@ class Ensure {
 
     get(key: string) {
         this.has(key);
-        // deno-lint-ignore no-explicit-any
-        const result: unknown = (this.#value as Record<string, any>)[key]
+        const result: unknown = (this.#value as Record<string, unknown>)[key]
         return new Ensure(result).as(`${this.#name}.${key}`);
     }
 
@@ -56,6 +55,7 @@ class Ensure {
     }
 
     typeof(value: string, message?: string): Ensure {
+        // deno-lint-ignore valid-typeof
         if (typeof this.#value !== value) {
             throw new EnsureError(typeof this.#value, 'type of', value, this.#name, message)
         }
