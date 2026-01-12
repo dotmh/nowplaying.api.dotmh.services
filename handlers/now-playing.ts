@@ -1,36 +1,19 @@
-import { Env } from "../helpers/env.ts";
+import { Context } from "@hono/hono";
+import { Config } from "../last-fm/config.ts";
 import { Client } from "../last-fm/client.ts";
-import { User__RecentTracks } from '../last-fm/@types/user.getRecentTracks.ts';
+import { nowPlaying } from "../lib/now-playing.ts";
+import { asResponse } from "../lib/as-response.ts";
+import { Env } from "../helpers/env.ts";
+import { ENV_CONFIG_LIMIT } from "../lib/constants.ts";
 
-const ENV_CONFIG_USER = 'CONFIG_USER';
-
-export interface NowPlaying {
-    images: { src: string, size: "small" | "medium" | "large" | "extralarge" }[];
-    artist: string;
-    album: string;
-    track: string;
-    user: string;
-    nowPlaying: boolean;
-}
-
-export const nowPlaying = async (client: Client, limit: number = 1): Promise<NowPlaying | NowPlaying[] | undefined> => {
-    const user = Env.get(ENV_CONFIG_USER).required.string;
-    const res = await client.get<User__RecentTracks>('user.getrecenttracks', {
-        user,
-        limit: limit.toString(),
-        extended: '1'
-    });
-
-    const data = res.recenttracks.track.map(track => {
-        const images = track.image?.map(image => ({ src: image['#text'], size: image.size }));
-        const artist = track.artist?.name;
-        const album = track.album?.['#text'];
-        const { name } = track;
-        const nowPlaying = track?.['@attr']?.nowplaying ?? false;
-        return { images, artist, album, track: name, user, nowPlaying };
-    });
-
-    const first = data.find(({ nowPlaying }) => nowPlaying) ?? data[0];
-
-    return limit === 1 ? first : data;
+export const nowPlayingHandler = async (ctx: Context): Promise<Response> => {
+    const limit = Env.get(ENV_CONFIG_LIMIT).optional('1').int;
+    try {
+        const config = new Config();
+        const client = new Client(config);
+        const response = await nowPlaying(client, limit);
+        return ctx.json(asResponse('success', response));
+    } catch (err) {
+        return ctx.json(asResponse('error', (err as Error).message), 500);
+    }
 }
