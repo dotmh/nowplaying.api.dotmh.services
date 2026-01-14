@@ -91,6 +91,56 @@ class Ensure {
         return this;
     }
 
+    lengthOf(length: number, operator: '>' | '<' | '>=' | '<=' | '=' = '=', message?: string): Ensure {
+        if (!Array.isArray(this.#value)) {
+            this.#fail('an array', 'to be', message);
+        }
+
+        const actual = this.#value.length;
+        const lengthError = () => {
+            throw new EnsureError(actual, `length ${operator}`, length, this.#name, message);
+        }
+
+
+        switch (operator) {
+            case ">":
+                if (!(actual > length)) throw lengthError()
+                break;
+            case "<":
+                if (!(actual < length)) throw lengthError()
+                break;
+            case "=":
+                if (!(actual === length)) throw lengthError()
+                break;
+            case "<=":
+                if (!(actual <= length)) throw lengthError()
+                break;
+            case ">=":
+                if (!(actual >= length)) throw lengthError()
+                break;
+            default:
+                throw new Error(`Unknown Operator ${operator} expect '>' | '<' | '>=' | '<=' | '='`);
+        }
+
+        return this;
+    }
+
+    lengthGreaterThan(length: number, message?: string): Ensure {
+        return this.lengthOf(length, '>', message);
+    }
+
+    lengthLessThan(length: number, message?: string): Ensure {
+        return this.lengthOf(length, '<', message);
+    }
+
+    lengthLessThanOrEqual(length: number, message?: string): Ensure {
+        return this.lengthOf(length, '<=', message);
+    }
+
+    lengthGreaterThanOrEqual(length: number, message?: string): Ensure {
+        return this.lengthOf(length, '>=', message);
+    }
+
     matches(pattern: RegExp, message?: string): Ensure {
         if (!(typeof this.#value === 'string' && this.#value.match(pattern))) {
             this.#fail(pattern.source, 'to match', message);

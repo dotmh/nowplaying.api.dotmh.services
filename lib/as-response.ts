@@ -1,4 +1,4 @@
-import { type NowPlaying } from "./now-playing.ts";
+import { type NowPlaying } from "./@types/now-playing.ts";
 
 export const asResponse = (
     state: 'error' | 'success',

@@ -1,9 +1,14 @@
 {
   "tasks": {
-    "dev": "deno run --env-file --allow-env --allow-net --watch main.ts"
+    "dev": "deno run --env-file --allow-env --allow-net --allow-read=public/,favicon.ico --watch main.ts"
   },
   "imports": {
     "@hono/hono": "jsr:@hono/hono@^4.11.3",
     "@std/assert": "jsr:@std/assert@1"
+  },
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "@hono/hono/jsx",
+    "lib": ["deno.window", "dom"]
   }
 }

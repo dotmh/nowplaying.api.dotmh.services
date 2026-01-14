@@ -1,3 +1,5 @@
 export const ENV_CONFIG_LIMIT = 'CONFIG_LIMIT';
 export const ENV_CONFIG_POWERED_BY = 'CONFIG_POWERED_BY';
 export const ENV_CONFIG_MAX_AGE_SEC = 'CONFIG_MAX_AGE_SEC';
+export const ENV_CONFIG_UPDATE_RATE = 'CONFIG_UPDATE_RATE';
+export const CONFIG_EVENT_NAME = 'nowplaying.update';

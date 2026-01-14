@@ -1,17 +1,9 @@
 import { Env } from "../helpers/env.ts";
 import { Client } from "../last-fm/client.ts";
 import { User__RecentTracks } from '../last-fm/@types/user.getRecentTracks.ts';
+import { type NowPlaying } from "./@types/now-playing.ts";
 
 const ENV_CONFIG_USER = 'CONFIG_USER';
-
-export interface NowPlaying {
-    images: { src: string, size: "small" | "medium" | "large" | "extralarge" }[];
-    artist: string;
-    album: string;
-    track: string;
-    user: string;
-    nowPlaying: boolean;
-}
 
 export const nowPlaying = async (client: Client, limit: number = 1): Promise<NowPlaying | NowPlaying[] | undefined> => {
     const user = Env.get(ENV_CONFIG_USER).required.string;
